@@ -5,4 +5,6 @@ using UnityEngine;
 public interface IPoolable
 {
     void AssignPool(ObjectsPool objectsPool);
+
+    IEnumerator AutoReturn(float seconds);
 }

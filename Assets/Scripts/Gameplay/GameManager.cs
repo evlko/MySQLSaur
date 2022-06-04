@@ -7,11 +7,15 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance = null;
 
-    public string username;
-    public bool loggedIn => username != null;
-
+    private string _username;
     private int _highscore;
     private int _maxhighscore;
+
+    public string username
+    {
+        get => _username;
+        set => _username = value;
+    }
 
     public int maxhighscore
     {
@@ -39,11 +43,6 @@ public class GameManager : MonoBehaviour
 
         StartCoroutine(GetMaxHighscore());
         DontDestroyOnLoad(gameObject);
-    }
-
-    public void LogOut()
-    {
-        username = null;
     }
 
     private IEnumerator SavePlayerData()

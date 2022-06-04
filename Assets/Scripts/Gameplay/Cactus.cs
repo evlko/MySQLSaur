@@ -21,4 +21,10 @@ public class Cactus : MonoBehaviour, IPoolable
     {
         _assignedPool = objectsPool;
     }
+
+    public IEnumerator AutoReturn(float t)
+    {
+        yield return new WaitForSeconds(t);
+        _assignedPool.ReturnEntityToPool(this.transform);
+    }
 }

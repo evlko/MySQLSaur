@@ -20,9 +20,11 @@ public class ObjectsPool : MonoBehaviour
 
     private Transform InstantiateNewEntity()
     {
-        var newEntityInstance = Instantiate(entityPrefabs[Random.Range(0, entityPrefabs.Count)],
-            spawnPoints[Random.Range(0, spawnPoints.Count)].position, Quaternion.identity);
-        newEntityInstance.parent = this.transform;
+        var spawnPoint = spawnPoints[Random.Range(0, spawnPoints.Count)];
+        var entityPrefab = entityPrefabs[Random.Range(0, entityPrefabs.Count)];
+        var newEntityInstance = Instantiate(entityPrefab,
+            spawnPoint.position, Quaternion.identity);
+        newEntityInstance.parent = spawnPoint.transform;
         _pool.Enqueue(newEntityInstance);
         newEntityInstance.GetComponent<IPoolable>().AssignPool(this);
         newEntityInstance.gameObject.SetActive(false);
@@ -33,6 +35,7 @@ public class ObjectsPool : MonoBehaviour
     {
         var entity = _pool.Count > 0 ? _pool.Dequeue() : InstantiateNewEntity();
         entity.gameObject.SetActive(true);
+        StartCoroutine(entity.GetComponent<IPoolable>().AutoReturn(5));
         return entity;
     }
 
