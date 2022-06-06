@@ -1,5 +1,5 @@
 using System.Collections;
-using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -10,7 +10,8 @@ public class DBUser : MonoBehaviour
     public InputField password;
 
     public Button submitButton;
-
+    public TextMeshProUGUI errorText;
+    
     public void SubmitAction(int buttonActionIndex)
     {
         StartCoroutine(SubmitActionToServer(buttonActionIndex));
@@ -28,6 +29,7 @@ public class DBUser : MonoBehaviour
         switch (buttonAction)
         {
             case ButtonAction.LogIn:
+                print("log");
                 www = new WWW("http://localhost:8888/sqlconnect/login.php", form);
                 break;
             case ButtonAction.SignUp:
@@ -36,17 +38,26 @@ public class DBUser : MonoBehaviour
         }
 
         yield return www;
-        
-        if (www.text[0] == '0')
+
+        switch (www.text[0])
         {
-            print("Success");
-            GameManager.instance.username = username.text;
-            GameManager.instance.highscore = int.Parse(www.text.Split('\t')[1]);
-            SceneManager.LoadScene("Main");
-        }
-        else
-        {
-            print("Action failed. error: #" + www.text);
+            default:
+                print("Action failed. error: #" + www.text);
+                break;
+            case '0':
+                GameManager.instance.username = username.text;
+                GameManager.instance.highscore = int.Parse(www.text.Split('\t')[1]);
+                SceneManager.LoadScene("Main");
+                break;
+            case '3':
+                errorText.text = "User with this name already exists";
+                break;
+            case '5':
+                errorText.text = "No user with this name";
+                break;
+            case '6':
+                errorText.text = "Incorrect password";
+                break;
         }
     }
 
@@ -55,9 +66,14 @@ public class DBUser : MonoBehaviour
         submitButton.interactable = (username.text.Length >= 8 && password.text.Length >= 8);
     }
 
-    public enum ButtonAction
+    private enum ButtonAction
     {
         LogIn = 0,
         SignUp = 1
+    }
+
+    public void ClearErrorText()
+    {
+        errorText.text = "";
     }
 }
