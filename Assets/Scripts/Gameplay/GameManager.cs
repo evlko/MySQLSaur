@@ -79,4 +79,10 @@ public class GameManager : MonoBehaviour
             print("Max highscore getter failed. Error: #" + www.text);
         }
     }
+
+    public void LogOut()
+    {
+        _username = "";
+        _highscore = 0;
+    }
 }
