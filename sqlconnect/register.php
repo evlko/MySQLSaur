@@ -17,11 +17,11 @@
     
     if (mysqli_num_rows($namecheck) > 0)
     {
-        echo "3: Name is locked";
+        echo "3\t";
         exit();
     }
     
-    $salt = "\$\5\$rounds=5000\$" . "steamedhams" . $username . "\$";
+    $salt = "\$5\$rounds=5000\$" . "dinosaurdino" . $username . "\$";
     $hash = crypt($password, $salt);
     $insertuserquery = "INSERT INTO players (username, hash, salt) VALUES ('" . $username . "', '" . $hash . "', '" . $salt . "');";
     mysqli_query($con, $insertuserquery) or die("2: Insert user failed");

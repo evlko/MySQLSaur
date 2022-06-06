@@ -17,7 +17,7 @@
     
     if (mysqli_num_rows($namecheck) != 1)
     {
-        echo "5: No user with this name OR several exist";
+        echo "5\t";
         exit();
     }
     
@@ -28,7 +28,7 @@
     $loginhash = crypt($password, $salt);
     if ($hash != $loginhash) 
     {
-        echo "6: Incorrect password";
+        echo "6\t";
         exit();
     }
     
